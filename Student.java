@@ -1,11 +1,10 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Student {
     private String name;
-    private int id;
+    private String id;
     private int NumberOfSubject;
     private int NumberOfCredits;
     private int NumberOfCourses = 0;
@@ -14,9 +13,9 @@ public class Student {
     private double FinalScore;
     private double TotalAverage;
     private double CurrentAverage;
-    Student(String name, int id){
-        this.name = name;
+    Student(String id, String password){
         this.id = id;
+        this.password = password;
     }
     public void participateInCourse(Course course) {
         if (!this.getCourseIntegerMap().containsKey(course)) {
@@ -62,7 +61,7 @@ public class Student {
         this.name = name;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -103,7 +102,7 @@ public class Student {
         return password;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 

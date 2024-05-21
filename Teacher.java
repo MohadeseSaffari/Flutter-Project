@@ -27,10 +27,12 @@ public class Teacher {
         else
             System.out.println(this.getLastname() + " doesn't teach " + course.getCourseName());
     }
-    public void removeStudent(Student student, Course course){
-        studentList.remove(student);
-        student.leftTheCourse(course);
-        System.out.println("Student" + " " + student.getName() + " removed from class");
+    public void removeStudent(Student student, Course course) {
+        if (student.getCourseIntegerMap().containsKey(course)) {
+            studentList.remove(student);
+            student.leftTheCourse(course);
+            System.out.println("Student" + " " + student.getName() + " removed from class");
+        }
     }
     public void addScore(Student student,Double score,Course course){
             student.setFinalScore(score,course);
