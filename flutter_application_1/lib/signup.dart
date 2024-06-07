@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/home.dart';
 import 'package:flutter_application_1/login.dart';
 import 'package:get/get.dart';
 
@@ -13,15 +14,20 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  void signup(String username,String password) async{
+  bool passwordObscured = true;
+  void signup(String email,String password) async{
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(email: username, password: password);
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
+      if (FirebaseAuth.instance.currentUser!.email != null) {
+        Get.offAll(HomePage());
+      }
     } catch (friebaseAuthException) {
       
     }
   }
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool loading = false;
   String get username =>  _usernameController.text.trim();
   String get password => _passwordController.text.trim();
   @override
@@ -42,9 +48,8 @@ class _SignUpPageState extends State<SignUpPage> {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: [Icon(Icons.arrow_back_ios_new_sharp,
-                  color: Colors.white,),
-                  SizedBox(width: 10,),
+                  children: [
+                  SizedBox(width: 15,),
                   Text("SignUp.",style: TextStyle(color: Colors.white,fontSize: 28,fontWeight: FontWeight.w700),)
                   ],
                 ),
@@ -54,7 +59,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   children: [
                     Container(
                       margin: EdgeInsets.only(top: 10),
-                      height: MediaQuery.of(context).size.height * 0.8,
+                      height: MediaQuery.of(context).size.height * 0.87,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -97,7 +102,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                       controller: _usernameController,
                                       // autofocus: ture,  -khodesh keyboard ro baz mikone
                                       // maxLength: , -bishtar az yek meghdari ejaze neveshtan nemidahad
-                                      keyboardType: TextInputType.number, //-keyboard adad baz mikone
+                                      //keyboardType: TextInputType.number, //-keyboard adad baz mikone
                                       // obscuringCharacter: "*",
                                       // obscureText: true, -textemon ro bu star hide mikone
                                       decoration: InputDecoration(labelText: " Username",border: InputBorder.none,prefixIcon: Icon(Icons.person)),
@@ -135,8 +140,16 @@ class _SignUpPageState extends State<SignUpPage> {
                                       // maxLength: , -bishtar az yek meghdari ejaze neveshtan nemidahad
                                       // keyboardType: TextInputType.number, -keyboard adad baz mikone
                                       obscuringCharacter: ".",
-                                      obscureText: true, //-textemon ro bu star hide mikone
-                                      decoration: InputDecoration(labelText: " Password",border: InputBorder.none,prefixIcon: Icon(Icons.lock)),
+                                      obscureText: passwordObscured, //-textemon ro bu star hide mikone
+                                      decoration: InputDecoration(labelText: " Password",border: InputBorder.none,prefixIcon: Icon(Icons.lock),
+                                      suffixIcon: IconButton(onPressed: (){
+                                      setState(() {
+                                        passwordObscured = !passwordObscured;
+                                      });
+                                    },
+                                    icon: Icon(
+                                      passwordObscured ? Icons.visibility_off : Icons.visibility,))
+                                      ),
                                       validator: (value){
                                         if (value == null || value.isEmpty) {
                                           return 'please enter your password';
@@ -173,6 +186,9 @@ class _SignUpPageState extends State<SignUpPage> {
                           const SizedBox(height: 25,),
                           InkWell(
                             onTap: () {
+                              setState(() {
+                                loading = true;
+                              });
                               // _fromKey.currentState!.validate();
                              signup(username, password); 
                             },
@@ -185,7 +201,21 @@ class _SignUpPageState extends State<SignUpPage> {
                                     color: Color.fromARGB(255, 56, 18, 194),
                                     borderRadius: BorderRadius.all(Radius.circular(10)),
                                     ),
-                                  child: const Center(child: Text("SignUp",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600,color: Colors.white),)),
+                                  child: Center(child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Visibility(
+                                        visible: loading ? false : true,
+                                        child: Text("Sign Up",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600,color: Colors.white),)),
+                                        Visibility(
+                                        visible: loading ? true : false,
+                                        child: SizedBox(
+                                          height: 20,
+                                          width: 20,
+                                          child: CircularProgressIndicator(color: Colors.white)),
+                                        ),
+                                    ],
+                                  )),
                             ),
                           ),
                           SizedBox(height: MediaQuery.of(context).size.height * 0.09),

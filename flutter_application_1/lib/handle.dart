@@ -26,7 +26,9 @@ class Handle extends StatelessWidget {
            if (username == null) {
              return const LoginPage();
            } else {
-            return const HomePage();
+            // FirebaseAuth.instance.signOut();
+            return HomePage();
+            // FirebaseAuth.instance.signInAnonymously();
            }
           }
           return const CircularProgressIndicator();

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_application_1/signup.dart';
 import 'package:get/get.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+
 
 // import 'firebase_options.dart';
 // import 'package:firebase_core/firebase_core.dart';
@@ -14,15 +17,37 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  bool passwordObscured = true;
   void login(String email,String password){
     try {
       FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
-    } catch (friebaseAuthException) {
-      
+    }on FirebaseAuthException catch (e) {
+      if (e.code == "network-request-failed") {
+        setState(() {
+          loading = false;
+        });
+        Alert(context: context, title: "Network request Falied!", desc: e.message).show();
+      }else if(e.code == "wrong-password"){
+        setState(() {
+          loading = false;
+        });
+        Alert(context: context, title: "Wrong Password!", desc: e.message).show();
+      }else if(e.code == "user-not-found"){
+        setState(() {
+          loading = false;
+        });
+        Alert(context: context, title: "User doesen't exists!", desc: e.message).show();
+      }else if(e.code == "unknown"){
+        setState(() {
+          loading = false;
+        });
+        Alert(context: context, title: "Please try again", desc: e.message).show();
+      }
     }
   }
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool loading = false;
   String get username =>  _usernameController.text.trim();
   String get password => _passwordController.text.trim();
   @override
@@ -43,19 +68,17 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: [Icon(Icons.arrow_back_ios_new_sharp,
-                  color: Colors.white,),
-                  SizedBox(width: 10,),
+                  children: [
+                  SizedBox(width: 15,),
                   Text("Log In.",style: TextStyle(color: Colors.white,fontSize: 28,fontWeight: FontWeight.w700),)
                   ],
                 ),
-                Positioned(top: MediaQuery.of(context).size.height,
-                child: Column(
+                Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Container(
                       margin: EdgeInsets.only(top: 10),
-                      height: MediaQuery.of(context).size.height * 0.8,
+                      height: MediaQuery.of(context).size.height * 0.87,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -96,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
                                     controller: _usernameController,
                                     // autofocus: ture,  -khodesh keyboard ro baz mikone
                                     // maxLength: , -bishtar az yek meghdari ejaze neveshtan nemidahad
-                                    keyboardType: TextInputType.number, //-keyboard adad baz mikone
+                                    keyboardType: TextInputType.emailAddress, //-keyboard adad baz mikone
                                     // obscuringCharacter: "*",
                                     // obscureText: true, -textemon ro bu star hide mikone
                                     decoration: InputDecoration(labelText: " Username",border: InputBorder.none,prefixIcon: Icon(Icons.person)),
@@ -130,8 +153,16 @@ class _LoginPageState extends State<LoginPage> {
                                     // maxLength: , -bishtar az yek meghdari ejaze neveshtan nemidahad
                                     // keyboardType: TextInputType.number, -keyboard adad baz mikone
                                     obscuringCharacter: ".",
-                                    obscureText: true, //-textemon ro bu star hide mikone
-                                    decoration: InputDecoration(labelText: " Password",border: InputBorder.none,prefixIcon: Icon(Icons.lock)),
+                                    obscureText: passwordObscured, //-textemon ro bu star hide mikone
+                                    decoration: InputDecoration(labelText: " Password",border: InputBorder.none,prefixIcon: Icon(Icons.lock),
+                                    suffixIcon: IconButton(onPressed: (){
+                                      setState(() {
+                                        passwordObscured = !passwordObscured;
+                                      });
+                                    },
+                                    icon: Icon(
+                                      passwordObscured ? Icons.visibility_off : Icons.visibility,))
+                                    ),
                                   ),
                                 ),
                           ),
@@ -149,6 +180,9 @@ class _LoginPageState extends State<LoginPage> {
                           const SizedBox(height: 10,),
                           InkWell(
                             onTap: () {
+                              setState(() {
+                                loading = true;
+                              });
                               login(username, password);
                             },
                             child: Container(
@@ -160,7 +194,22 @@ class _LoginPageState extends State<LoginPage> {
                                     color: Color.fromARGB(255, 56, 18, 194),
                                     borderRadius: BorderRadius.all(Radius.circular(10)),
                                     ),
-                                  child: const Center(child: Text("Login",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600,color: Colors.white),)),
+                                  child: Center(
+                                    child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Visibility(
+                                        visible: loading ? false : true,
+                                        child: Text("Login",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600,color: Colors.white),)),
+                                        Visibility(
+                                        visible: loading ? true : false,
+                                        child: SizedBox(
+                                          height: 20,
+                                          width: 20,
+                                          child: CircularProgressIndicator(color: Colors.white)),
+                                        ),
+                                    ],
+                                  )),
                             ),
                           ),
                           SizedBox(height: MediaQuery.of(context).size.height * 0.09),
@@ -180,7 +229,6 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ],
-                ),
                 )
               ],
             ),
