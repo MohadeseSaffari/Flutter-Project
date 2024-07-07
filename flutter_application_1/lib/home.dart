@@ -1,9 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:bottom_bar/bottom_bar.dart';
+import 'package:flutter_application_1/homepage/myCallender.dart';
+import 'package:flutter_application_1/homepage/myHome.dart';
 import 'package:flutter_application_1/news.dart';
-import 'package:flutter_application_1/profile.dart';
+import 'package:flutter_application_1/exercisePage.dart';
+import 'package:flutter_application_1/testhome.dart';
+import 'package:flutter_application_1/todo_page/todoHome.dart';
+import 'package:flutter_application_1/userPerfrences/current_user.dart';
+import 'package:get/get.dart';
+import 'package:flutter_application_1/myTodo.dart';
+import 'package:flutter_application_1/classes.dart';
+import 'package:flutter_application_1/test/profile_page_test.dart';
+
+
 
 class HomePage extends StatelessWidget {
+
+  CurrentUser remberCurrentUser = Get.put(CurrentUser());
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,19 +37,22 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final CurrentUser _currentUser = Get.put(CurrentUser());
+  int studentId = 1; // Example student ID
   int _currentPage = 0;
   final _pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
+    studentId = _currentUser.user.user_id;
     return Scaffold(
       body: PageView(
         controller: _pageController,
         children: [
-          Container(color: Color.fromARGB(255, 56, 18, 194)),
-          Container(color: Color.fromARGB(255, 56, 18, 194)),
-          ProfilePage(),
-          Container(color: Color.fromARGB(255, 56, 18, 194)),
+          MyHomePage(pageController: _pageController),
+          TodoHomeScreen(studentId: studentId),
+          ProfilePageTest(),
+          CalendarPage(),
           NewsPage(),
         ],
         onPageChanged: (index) {
@@ -53,36 +70,37 @@ class _HomeState extends State<Home> {
           BottomBarItem(
             icon: Icon(Icons.home),
             title: Text('Home'),
-            activeColor: Colors.blue,
-            activeTitleColor: Colors.blue.shade600,
+            activeColor: Color.fromARGB(255, 56, 18, 194),
+            activeTitleColor: Color.fromARGB(255, 56, 18, 194),
           ),
           BottomBarItem(
-            icon: Icon(Icons.favorite),
+            icon: Icon(Icons.add_task),
             title: Text('To Do'),
-            activeColor: Colors.red,
+            activeColor: Color.fromARGB(255, 56, 18, 194),
           ),
           BottomBarItem(
             icon: Icon(Icons.person),
             title: Text('Profile'),
             backgroundColorOpacity: 0.1,
-            activeColor: Colors.greenAccent.shade700,
+            activeColor: Color.fromARGB(255, 56, 18, 194),
           ),
           BottomBarItem(
             icon: Icon(Icons.class_),
             title: Text('Classes'),
-            activeColor: Colors.orange,
-            activeIconColor: Colors.orange.shade600,
-            activeTitleColor: Colors.orange.shade700,
+            activeColor: Color.fromARGB(255, 56, 18, 194),
+            activeIconColor: Color.fromARGB(255, 56, 18, 194),
+            activeTitleColor: Color.fromARGB(255, 56, 18, 194),
           ),
           BottomBarItem(
             icon: Icon(Icons.newspaper),
             title: Text('News'),
-            activeColor: Color.fromARGB(255, 141, 5, 89),
-            activeIconColor: Color.fromARGB(255, 141, 5, 89),
-            activeTitleColor: Color.fromARGB(255, 141, 5, 89),
+            activeColor: Color.fromARGB(255, 56, 18, 194),
+            activeIconColor:Color.fromARGB(255, 56, 18, 194),
+            activeTitleColor: Color.fromARGB(255, 56, 18, 194),
           ),
         ],
       ),
     );
   }
 }
+

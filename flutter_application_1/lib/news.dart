@@ -113,17 +113,17 @@ void initState(){
                   Container(
                     child:ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: Image.asset("assets/business.jpg",height: 150,width: 150,fit: BoxFit.cover,))
+                      child: Image.asset("assets/pic6.jpg",height: 150,width: 150,fit: BoxFit.cover,))
                   ),
                   SizedBox(width: 8,),
                   Column(
                     children: [
                       Container(
                         width: MediaQuery.of(context).size.width/2,
-                        child: Text("An intersting things happened on the business",style: TextStyle(color: Colors.black,fontSize: 17,fontWeight: FontWeight.w500),)),
+                        child: Text("Google Joins AI Laptop Party With Chromebook Plus:",style: TextStyle(color: Colors.black,fontSize: 17,fontWeight: FontWeight.w500),)),
                       Container(
                         width: MediaQuery.of(context).size.width/2,
-                        child: Text("Then the final kick to beat in the rest",style: TextStyle(color: Colors.black54,fontSize: 16,fontWeight: FontWeight.w500),)),
+                        child: Text("Google announced on Tuesday that it’s joining the AI laptop.",style: TextStyle(color: Colors.black54,fontSize: 16,fontWeight: FontWeight.w500),)),
                     ],
                   ),
                 ],
@@ -138,17 +138,17 @@ void initState(){
                   Container(
                     child:ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: Image.asset("assets/business.jpg",height: 150,width: 150,fit: BoxFit.cover,))
+                      child: Image.asset("assets/pic5.jpg",height: 150,width: 150,fit: BoxFit.cover,))
                   ),
                   SizedBox(width: 8,),
                   Column(
                     children: [
                       Container(
                         width: MediaQuery.of(context).size.width/2,
-                        child: Text("An intersting things happened on the business",style: TextStyle(color: Colors.black,fontSize: 17,fontWeight: FontWeight.w500),)),
+                        child: Text("Rethinking AI Priorities: Lessons From IBM Think and Intel’s Lunar Lake",style: TextStyle(color: Colors.black,fontSize: 17,fontWeight: FontWeight.w500),)),
                       Container(
                         width: MediaQuery.of(context).size.width/2,
-                        child: Text("Then the final kick to beat in the rest",style: TextStyle(color: Colors.black54,fontSize: 16,fontWeight: FontWeight.w500),)),
+                        child: Text("I watched IBM Think last week.",style: TextStyle(color: Colors.black54,fontSize: 16,fontWeight: FontWeight.w500),)),
                     ],
                   ),
                 ],
