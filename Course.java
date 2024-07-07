@@ -9,17 +9,18 @@ public class Course {
     private String masterName;
     private int numberOfCredit;
     private List <Student> studentsList = new ArrayList<>();
-    private boolean subjectActivation;
+    private boolean activation;
     private List <Assignment> assignmentList = new ArrayList<>();
     private int numberOfAssignments;
     private String examDate;
-    private boolean projectActivation;
+    private List<Assignment> activeProjects = new ArrayList<>();
+    private List<Assignment> inactiveProjects = new ArrayList<>();
     private int numberOfStudents;
-    public Course(String courseName, String masterName, int numberOfCredit, boolean subjectActivation, String examDate){
+    public Course(String courseName, String masterName, int numberOfCredit, boolean activation, String examDate){
         this.courseName = courseName;
         this.masterName = masterName;
         this.numberOfCredit = numberOfCredit;
-        this.subjectActivation = subjectActivation;
+        this.activation = activation;
         this.examDate = examDate;
     }
     public void printStudentsList(){
@@ -37,15 +38,29 @@ public class Course {
         numberOfStudents--;
         s.leftTheCourse(this);
     }
-    public Double maxScore(){
-        Double max = 0.0;
+    public void maxScore(){
+        double max = 0.0;
         for (Student student : studentsList) {
-            if (student.getFinalScore() > max)
-                max = student.getFinalScore();
+            double grade = student.getCourseIntegerMap().get(this);
+            if (grade > max)
+                max = grade;
+            System.out.println("Top student is " + student.getName() + " with score " + max);
         }
-        return max;
     }
-    public void printAssingnmentList(){
+    public void addAssignment(Assignment assignment){
+        assignmentList.add(assignment);
+        numberOfAssignments++;
+        if (assignment.getCourse().getActivation()){
+            activeProjects.add(assignment);
+        }
+        else
+            inactiveProjects.add(assignment);
+    }
+    public void removeAssignment(Assignment assignment){
+        assignmentList.remove(assignment);
+        numberOfAssignments--;
+    }
+    public void printAssignmentList(){
         for (Assignment assignment : assignmentList) {
             System.out.println(assignment.getName());
         }
@@ -67,8 +82,8 @@ public class Course {
         this.studentsList = studentsList;
     }
 
-    public void setSubjectActivation(boolean subjectActivation) {
-        this.subjectActivation = subjectActivation;
+    public void setActivation(boolean activation) {
+        this.activation = activation;
     }
 
     public void setAssignmentList(List<Assignment> assignmentList) {
@@ -77,10 +92,6 @@ public class Course {
 
     public void setNumberOfAssignments(int numberOfAssignments) {
         this.numberOfAssignments = numberOfAssignments;
-    }
-
-    public void setProjectActivation(boolean projectActivation) {
-        this.projectActivation = projectActivation;
     }
 
     public void setNumberOfStudents(int numberOfStudents) {
@@ -103,12 +114,8 @@ public class Course {
         return studentsList;
     }
 
-    public boolean isSubjectActivation() {
-        return subjectActivation;
-    }
-
-    public boolean isProjectActivation() {
-        return projectActivation;
+    public boolean getActivation(){
+        return activation;
     }
 
     public List<Assignment> getAssignmentList() {

@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -7,18 +6,6 @@ public class Login {
     private static final File file = new File("/Users/mohsaffari/Desktop/info.txt");
     public static void main(String[] args){
         Scanner scanner = new Scanner(System.in);
-        boolean isAdmin = false;
-        while (!isAdmin){
-            System.out.println("1. Teacher");
-            System.out.println("2. Student");
-            String choice = scanner.nextLine();
-            switch (choice){
-                case "1":
-
-            }
-
-        }
-
         boolean exist = false;
         while (!exist){
             System.out.println("chose an option:");
@@ -27,8 +14,8 @@ public class Login {
             String choice = scanner.nextLine();
             switch (choice){
                 case "1":
-                SignUp();
-                break;
+                    SignUp();
+                    break;
                 case "2":
                     LogIn();
                     break;
@@ -37,7 +24,7 @@ public class Login {
             }
         }
         scanner.close();
-    }
+        }
     private static void SignUp(){
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter a username");
@@ -49,7 +36,7 @@ public class Login {
         System.out.println("Enter a password");
         String password = scanner.nextLine();
         while (!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?!.*" + Pattern.quote(username) + ").{8,}$")){
-            System.out.println("Password has at least has 8 characters and contains numbers and both capital and small letters also it shouldn't exactly contains your username");
+            System.out.println("Password should have at least has 8 characters and contains numbers and both capital and small letters also it shouldn't exactly contains your username");
             password = scanner.nextLine();
         }
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(file,true))) {
@@ -69,7 +56,7 @@ public class Login {
             String line;
             boolean found = false;
             while ((line = reader.readLine()) != null){
-                String[] parts = line.split(":");
+                String[] parts = line.split(" : ");
                 if (username.equals(parts[0]) && password.equals(parts[1])){
                     found = true;
                     System.out.println("Successfully login");

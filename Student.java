@@ -17,6 +17,16 @@ public class Student {
         this.id = id;
         this.password = password;
     }
+    void printRecord() {
+        System.out.println("Student Record:");
+        System.out.println("    Number of courses: " + getNumberOfCourses());
+        System.out.println("    Number of Units: " + getNumberOfCredits());
+        System.out.println("    Courses Taken:");
+        for (Map.Entry<Course, Double> entry : courseIntegerMap.entrySet())
+            System.out.println("        " + entry.getKey().getCourseName() + ": " + entry.getValue());
+
+        System.out.println("    Average Score: " + getCurrentAverage());
+    }
     public void participateInCourse(Course course) {
         if (!this.getCourseIntegerMap().containsKey(course)) {
             courseIntegerMap.put(course, null);
@@ -24,6 +34,8 @@ public class Student {
             NumberOfCredits += course.getNumberOfCredit();
             System.out.println("student with id " + this.getId() + " has participate in " + course.getCourseName());
         }
+        else
+            System.out.println("You are already participating in " + course.getCourseName());
     }
     public void leftTheCourse(Course course) {
         if (this.getCourseIntegerMap().containsKey(course)) {
@@ -32,6 +44,8 @@ public class Student {
             NumberOfCredits -= course.getNumberOfCredit();
             System.out.println("student with id " + this.getId() + " has left the " + course.getCourseName());
         }
+        else
+            System.out.println("You are not participating in " + course.getCourseName());
     }
 
     public void printListOfCourses(){
@@ -44,11 +58,11 @@ public class Student {
         for (Double value : courseIntegerMap.values()){
             sum+=value;
         }
-        CurrentAverage = sum /this.NumberOfCourses;
+        CurrentAverage = sum /this.getNumberOfCredits();
             return CurrentAverage;
     }
     public void printNumberOfCredits(){
-        System.out.println(NumberOfCredits);
+        System.out.println(this.getNumberOfCredits());
     }
     public void score(Double score, Course course){
         FinalScore += score;

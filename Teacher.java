@@ -7,7 +7,6 @@ public class Teacher {
     private String lastname;
     private int NumberOfCourseProvides;
     private List <Course> CourseProvideslist = new ArrayList<>();
-    private List <Student> studentList = new ArrayList<>();
     Scanner scanner = new Scanner(System.in);
     public Teacher(String firstname, String lastname){
         this.firstname = firstname;
@@ -20,25 +19,36 @@ public class Teacher {
     }
     public void addStudent(Course course,Student newStudent){
         if (this.CourseProvideslist.contains(course)) {
-            studentList.add(newStudent);
+            course.addStudent(newStudent);
             newStudent.participateInCourse(course);
-            System.out.println("Student" + " " + newStudent.getName() + " added to the class " + course.getCourseName());
+            System.out.println("Student " + newStudent.getName() + " added to the class " + course.getCourseName());
+        } else if (!this.CourseProvideslist.contains(course)) {
+            System.out.println(this.getLastname() + " doesn't teach " + course.getCourseName());
         }
         else
-            System.out.println(this.getLastname() + " doesn't teach " + course.getCourseName());
+            System.out.println("Student " + newStudent.getName() + " is already participate in " + course.getCourseName());
     }
     public void removeStudent(Student student, Course course) {
-        if (student.getCourseIntegerMap().containsKey(course)) {
-            studentList.remove(student);
+        if (student.getCourseIntegerMap().containsKey(course) && this.CourseProvideslist.contains(course)) {
+            course.removeStudent(student);
             student.leftTheCourse(course);
-            System.out.println("Student" + " " + student.getName() + " removed from class");
-        }
+            System.out.println("Student " + student.getName() + " removed from " + course.getCourseName());
+        } else if (!this.CourseProvideslist.contains(course)) {
+            System.out.println(this.getLastname() + " doesn't teach " + course.getCourseName());
+        } else
+            System.out.println("Student " + student.getName() + "doesn't participate in " + course.getCourseName());
     }
     public void addScore(Student student,Double score,Course course){
+        if (this.CourseProvideslist.contains(course) && student.getCourseIntegerMap().containsKey(course))
             student.setFinalScore(score,course);
+        else if (!this.CourseProvideslist.contains(course)) {
+            System.out.println(this.getLastname() + " doesn't teach " + course.getCourseName());
+        }
+        else
+            System.out.println("Student " + student.getName() + "doesn't participate in " + course.getCourseName());
     }
     public void setAssignment(Course course, Assignment assignment){
-        if (this.getCourseProvideslist().contains(course) && course.isSubjectActivation()){
+        if (this.getCourseProvideslist().contains(course) && course.getActivation()){
             course.getAssignmentList().add(assignment);
             System.out.println(assignment.getName() + " has been set.");
         }
@@ -47,13 +57,13 @@ public class Teacher {
         else
             System.out.println("This is an inactive subject");
     }
-    public void removeAssignment(Course course, Assignment assignment, Teacher teacher){
-        if (teacher.getCourseProvideslist().contains(course) && course.isSubjectActivation()){
+    public void removeAssignment(Course course, Assignment assignment){
+        if (this.getCourseProvideslist().contains(course) && course.getActivation()){
             course.getAssignmentList().remove(assignment);
             System.out.println(assignment.getName() + " has been removed.");
         }
-        else if (!teacher.getCourseProvideslist().contains(course))
-            System.out.println(teacher.getFirstname() + " " + teacher.getLastname() + " doesn't teach this course.");
+        else if (!this.getCourseProvideslist().contains(course))
+            System.out.println(this.getFirstname() + " " + this.getLastname() + " doesn't teach this course.");
         else
             System.out.println("This is an inactive subject");
     }
@@ -69,13 +79,13 @@ public class Teacher {
     public void setNumberOfCourseProvides(int numberOfCourseProvides) {
         NumberOfCourseProvides = numberOfCourseProvides;
     }
-
-    public void setCourseProvideslist(List<Course> courseProvideslist) {
-        CourseProvideslist = courseProvideslist;
+    public void PrintCourse(){
+        for (Course course : CourseProvideslist) {
+            System.out.println(course.getCourseName());
+        }
     }
-
-    public void setStudentList(List<Student> studentList) {
-        this.studentList = studentList;
+    public void setCourseProvidesList(List<Course> courseProvideslist) {
+        CourseProvideslist = courseProvideslist;
     }
 
     public String getFirstname() {
@@ -95,7 +105,6 @@ public class Teacher {
         return CourseProvideslist;
     }
 
-    public List<Student> getStudentList() {
-        return studentList;
+    public void setVisible(boolean b) {
     }
 }
