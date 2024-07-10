@@ -1,20 +1,25 @@
 <?php
 include "../connection.php";
 
-$userName = $_POST['user_name'];
-// $userEmail = $_POST['student_email'];
-$userPassword = md5($_POST['user_password']);
+// Get the raw POST data
+$rawData = file_get_contents("php://input");
+$data = json_decode($rawData, true);
 
-$sqlQuery = "INSERT INTO students_table SET user_name = '$userName', 
--- student_email = '$userEmail',
-user_password = '$userPassword'";
+// Check if the necessary keys are set in the decoded data
+if (isset($data['username']) && isset($data['password'])) {
+    $userName = $data['username'];
+    $userPassword = md5($data['password']);
 
-$resultOfQuery = $connectNow->query($sqlQuery);
+    // Prepare and execute the SQL query
+    $sqlQuery = "INSERT INTO students_table (user_name, user_password) VALUES ('$userName', '$userPassword')";
+    $resultOfQuery = $connectNow->query($sqlQuery);
 
-if ($resultOfQuery) {
-    echo json_encode(array("success"=>true));
+    if ($resultOfQuery) {
+        echo json_encode(array("success" => true));
+    } else {
+        echo json_encode(array("success" => false, "error" => $connectNow->error));
+    }
+} else {
+    echo json_encode(array("success" => false, "message" => "Invalid input"));
 }
-else
-{
-    echo json_encode(array("success"=>false));
-}
+?>
