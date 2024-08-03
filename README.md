@@ -89,11 +89,8 @@ This project is a comprehensive University Management System with a Command Line
 
 ## Demo
 
-[![Project Demo](https://drive.google.com/file/d/1jc03vD0NSNLiGdEYUGvmdR-R7vxKjD7P/view?usp=drive_link)
+Click the link above to watch the demo video:
 
-Click the image above to watch the demo video.
-
-Or copy this url and open it in your browser:
 https://drive.google.com/file/d/1jc03vD0NSNLiGdEYUGvmdR-R7vxKjD7P/view?usp=drive_link
 
 ## Screenshots
